@@ -1,0 +1,21 @@
+[server]
+srv01 ansible_host=10.20.20.161
+srv02 ansible_host=10.20.20.162
+srv03 ansible_host=10.20.20.163
+srv04 ansible_host=10.20.20.164
+srv05 ansible_host=10.20.20.165
+srv06 ansible_host=10.20.20.166
+srv07 ansible_host=10.20.20.167
+srv08 ansible_host=10.20.20.168
+srv09 ansible_host=10.20.20.169
+srv10 ansible_host=10.20.20.170
+srv11 ansible_host=10.20.20.171
+srv12 ansible_host=10.20.20.9
+srv13 ansible_host=10.20.20.10
+
+[all:vars]
+ansible_connection=ssh
+ansible_user=root
+#ansible_user=ubuntu
+ansible_ssh_pass=d3xip;21
+

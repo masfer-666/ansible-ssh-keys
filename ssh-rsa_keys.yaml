@@ -1,0 +1,40 @@
+---
+- name: SSH KEY GENERATED
+  hosts: all
+  become: true
+  become_user: root 
+  vars:
+    ansible_become_pass: "d3xip;21"
+
+  tasks:
+    - name: Set PasswordAuthentication to yes in sshd_config
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PermitRootLogin prohibit-password'
+        line: 'PermitRootLogin yes'
+      register: result
+
+    - name: Restart sshd service 
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+    
+    - name: Generate SSH key pair
+      ansible.builtin.command:
+        cmd: ssh-keygen -t rsa -f /root/.ssh/id_rsa -N ""  # -N "" sets an empty passphrase
+      args:
+        creates: /root/.ssh/id_rsa  # Only run if the key pair doesn't exist yet
+ 
+    - name: Ensure authorized_keys file exists
+      ansible.builtin.file:
+        path: /root/.ssh/authorized_keys
+        state: touch
+        owner: "{{ ansible_user }}"
+        mode: "0600"
+
+    - name: Add SSH public key to authorized_keys
+      ansible.builtin.authorized_key:
+        user: "{{ ansible_user }}"
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+...
